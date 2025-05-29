@@ -35,7 +35,7 @@ class CustomFedProx(FedProx):
         self.model_class = dynamic_model_import(model_class_path)
         self.results_to_save = {}
         self.dataset_name = dataset_name
-        self.image_size=image_size
+        self.image_size = image_size
         self.num_classes = num_classes
         self.num_channels = num_channels
         self.hparams = {
@@ -50,17 +50,14 @@ class CustomFedProx(FedProx):
         # file name id
         timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
         self.exp_id = (
-            f"server_rounds_{server_rounds}_"
-            f"local_epochs_{local_epochs}_"
-            f"lr_{learning_rate:.0e}_"
-            f"batch_size_{batch_size}_"
+            f"dataset_{dataset_name}_"
+            f"model_{model_name}_"
             f"alpha_{alpha}_"
-            f"fraction_fit_{c}_"
             f"{timestamp}"
         )
 
         # create save dir
-        base_dir = os.path.join("results", f"{dataset_name}_{model_name}")
+        base_dir = os.path.join("dataset", f"{dataset_name}_{model_name}")
         self.save_dir = os.path.join(base_dir, self.exp_id)
 
         os.makedirs(self.save_dir, exist_ok=True)
@@ -86,13 +83,14 @@ class CustomFedProx(FedProx):
             ndarrays = parameters_to_ndarrays(parameter_aggregated)
             set_weights(model, ndarrays)
             
-            # create path
-            ckpt_name = f"round_{server_round}.pth"
-            ckpt_path = os.path.join(self.save_dir, ckpt_name)
-            
-            # save model
-            torch.save(model.state_dict(), ckpt_path)
-            print(f"Saved checkpoint to {ckpt_path}")
+            if server_round >= 200:
+                # create path
+                ckpt_name = f"round_{server_round}.pth"
+                ckpt_path = os.path.join(self.save_dir, ckpt_name)
+                
+                # save model
+                torch.save(model.state_dict(), ckpt_path)
+                print(f"Saved checkpoint to {ckpt_path}")
 
 
         return super().aggregate_fit(server_round, results, failures)

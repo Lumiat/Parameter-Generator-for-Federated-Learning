@@ -1,0 +1,13 @@
+dataset-name = "mnist"
+model-name = "vit-tiny"
+model-path = "dataset.models.vit_tiny.VitTiny"
+image-size = 28
+num-classes = 10 
+num-channels = 1
+num-server-rounds = 30        # 服务端训练轮次
+fraction-evaluate = 0.0      # 每轮参与评估的客户端比例
+local-epochs = 5             # 客户端本地训练轮次（关键参数）
+learning-rate = 0.01          # 客户端学习率（关键参数）
+batch-size = 32              # 客户端批次大小（关键参数）
+alpha = 1.0                  # 迪利克雷分布参数
+fraction-fit = 0.5

@@ -110,8 +110,8 @@ class CustomFedProx(FedProx):
             json.dump(self.results_to_save, json_file, indent=4)
         
         # Log metrics to W&B
-        wandb.log(my_results, step=server_round)
-        
+        wandb.log(results, step=server_round)
+
         return super().evaluate(server_round, parameters)  
         
     def __del__(self):

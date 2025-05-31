@@ -108,8 +108,12 @@ class CustomFedProx(FedProx):
         json_path = os.path.join(self.save_dir, "results.json")
         with open(json_path,'w') as json_file:
             json.dump(self.results_to_save, json_file, indent=4)
+        
+        # Log metrics to W&B
+        wandb.log(my_results, step=server_round)
+        
         return super().evaluate(server_round, parameters)  
-    
+        
     def __del__(self):
         if wandb.run:
             wandb.finish()

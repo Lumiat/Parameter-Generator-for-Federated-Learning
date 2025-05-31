@@ -57,14 +57,14 @@ class CustomFedProx(FedProx):
         )
 
         # create save dir
-        base_dir = os.path.join("dataset", f"{dataset_name}_{model_name}")
+        base_dir = os.path.join("dataset/checkpoint", f"{dataset_name}_{model_name}")
         self.save_dir = os.path.join(base_dir, self.exp_id)
 
         os.makedirs(self.save_dir, exist_ok=True)
 
         # initialize wanb
         wandb.init(
-            project=f"fed-{dataset_name}-{model_name}",
+            project=f"{dataset_name}-{model_name}",
             name=self.exp_id,
             config=self.hparams,
             dir=base_dir 
@@ -113,3 +113,4 @@ class CustomFedProx(FedProx):
     def __del__(self):
         if wandb.run:
             wandb.finish()
+
